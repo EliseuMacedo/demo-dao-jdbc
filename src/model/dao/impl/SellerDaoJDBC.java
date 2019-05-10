@@ -54,22 +54,16 @@ public class SellerDaoJDBC implements SellerDao {
 							+ "ON seller.DepartmentId = department.Id " + "WHERE seller.Id = ?");
 
 			st.setInt(1, id);
-
 			rs = st.executeQuery();
 
 			// o resultset aponta para a posição zero, e somente na posição 1 que tem objeto
 
 			if (rs.next()) { // testar se veio algum resultado
-
-				Department dep = new Department(rs.getInt("DepartmentId"), rs.getString("DepName"));
-				Seller objSeller = new Seller(rs.getInt("Id"), rs.getString("Name"), rs.getString("Email"),
-						rs.getDate("BirthDate"), rs.getDouble("BaseSalary"), dep);
+				Department dep = instantiateDepartment(rs);
+				Seller objSeller = instantiateSeller(rs,dep);
 				return objSeller;
-
 			}
-
 			return null;
-
 		} 
 		catch (SQLException e) {
 			// lançar exceção personalizada
@@ -81,6 +75,19 @@ public class SellerDaoJDBC implements SellerDao {
 			// a conexão não fechou
 		}
 
+	}
+
+	private Seller instantiateSeller(ResultSet rs, Department dep) throws SQLException {
+
+		Seller obj = new Seller(rs.getInt("Id"), rs.getString("Name"), rs.getString("Email"),rs.getDate("BirthDate"), rs.getDouble("BaseSalary"), dep);
+		return obj;
+	}
+
+	private Department instantiateDepartment(ResultSet rs) throws SQLException {
+	
+		Department dep = new Department(rs.getInt("DepartmentId"), rs.getString("DepName"));
+		return dep;
+		
 	}
 
 	@Override
