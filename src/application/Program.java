@@ -2,6 +2,7 @@ package application;
 
 
 
+import java.util.Date;
 import java.util.List;
 
 import model.dao.DaoFactory;
@@ -38,6 +39,13 @@ public class Program {
 		list.forEach(System.out::println);
 		
 		
+		System.out.println("\n====== TESTE 4: seller Insert ========");
+		
+		Seller newSeller = new Seller(1, "Greg", "greg@gmail.com", new Date(),4000.0, dep);
+		
+		sellerDao.insert(newSeller);
+		
+		System.out.println("Inserido: novo ID = " + newSeller.getId());
 		
 	}
 
