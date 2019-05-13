@@ -24,7 +24,6 @@ public class SellerDaoJDBC implements SellerDao {
 
 	// para forçar a injeção de dependencia vou colocar um construtor
 	public SellerDaoJDBC(Connection conn) {
-
 		this.conn = conn;
 	}
 
@@ -100,7 +99,25 @@ public class SellerDaoJDBC implements SellerDao {
 
 	@Override
 	public void deleteById(int id) {
-		// TODO Auto-generated method stub
+		
+		PreparedStatement st = null;
+
+		try {
+			st = conn.prepareStatement(
+					"DELETE FROM seller WHERE Id = ?");
+
+			st.setInt(1, id);
+			//int linhas = st.executeUpdate(); para lançar exceção, if (linhas == 0){throws new DbException("Id não encontrado!!!");
+			st.executeUpdate();
+			
+
+		} catch (SQLException e) {
+
+			throw new DbException(e.getMessage());
+		}
+		finally {
+			DB.closeStatement(st);
+		}
 
 	}
 
